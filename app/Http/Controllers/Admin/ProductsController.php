@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use App\Models\Product;
 use App\Models\Category;
+use Intervention\Image\Facades\Image;
 
 class ProductsController extends Controller
 {
@@ -39,6 +40,7 @@ class ProductsController extends Controller
      */
     public function store(Request $request)
     {
+        // return $request;
         $validated = $request->validate([
             'product_name' => 'required|max:255|unique:products',
             'product_desc' => 'required',
@@ -55,6 +57,16 @@ class ProductsController extends Controller
         $product->product_desc = $request->input('product_desc');
         $product->price = $request->input('price');
         $product->category_id = $request->input('category_id');
+        if ($request->hasFile('image_upload')) {
+            $name = $request->file('image_upload')->getClientOriginalName();
+            $request->file('image_upload')->storeAs('public/images', $name);
+            // return storage_path('public/images/'.$name);
+            // $image_resize = Image::make(storage_path('public/images/'.$name));
+            // $image_resize->fit(550, 750);
+            // $image_resize->save(storage_path('public/images/thumbnail/' .$name));
+            $product->image = $name;
+        }
+        // return $product;
         if($product->save()){
             return redirect()->route('products_list');
         }else {
@@ -91,7 +103,7 @@ class ProductsController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @param  int  $id
      * @return \Illuminate\Http\Response
-     */
+     */ 
     public function update(Request $request, $id)
     {
         //
