@@ -58,12 +58,14 @@ class ProductsController extends Controller
         $product->price = $request->input('price');
         $product->category_id = $request->input('category_id');
         if ($request->hasFile('image_upload')) {
+            // uploading image to images folder
             $name = $request->file('image_upload')->getClientOriginalName();
             $request->file('image_upload')->storeAs('public/images', $name);
-            // return storage_path('public/images/'.$name);
-            // $image_resize = Image::make(storage_path('public/images/'.$name));
-            // $image_resize->fit(550, 750);
-            // $image_resize->save(storage_path('public/images/thumbnail/' .$name));
+            // croping the image and saving it to thumbnail folder inside images folder
+            // $image_resize = Image::make(storage_path('app/public/images/'.$name));
+            // $image_resize->resize(550, 750);
+            // $image_resize->save(storage_path('app/public/images/thumbnail/'.$name));
+            image_crop($name, 550, 750);
             $product->image = $name;
         }
         // return $product;

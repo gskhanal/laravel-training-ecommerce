@@ -1,5 +1,4 @@
 <?php
-
 use Illuminate\Support\Facades\Route;
 use App\Models\Product;
 use App\Models\Category;
@@ -15,10 +14,19 @@ use App\Http\Controllers\ProductsController;
 | contains the "web" middleware group. Now create something great!
 |
 */
+Route::get('/', function () {
+    return view('welcome');
+});
+
+Route::get('/dashboard', function () {
+    return view('dashboard');
+})->middleware(['auth'])->name('dashboard');
+
+require __DIR__.'/auth.php';
 
 Route::get('/', function () {
     $products = Product::all();
-    return view('products', ['products' => $products] );
+    return view('home', ['products' => $products] );
 });
 Route::get('/products/{prod}', function (Product $prod) {  
     // $product = Product::find($id);
@@ -57,8 +65,11 @@ Route::get('/categories/{category}', function(Category $category) {
 
 
 //  admin routing
-Route::get('/admin/dashboard', [App\Http\Controllers\Admin\DashboardController::class, 'index'])->name('dashboard');
-Route::get('/admin/products', [App\Http\Controllers\Admin\ProductsController::class, 'index'])->name('products_list');
-Route::get('/admin/products/create', [App\Http\Controllers\Admin\ProductsController::class, 'create'])->name('create_product');
-Route::post('/admin/products/store', [App\Http\Controllers\Admin\ProductsController::class, 'store']);
-Route::get('/admin/products/edit/{product}', [App\Http\Controllers\Admin\ProductsController::class, 'edit']);
+Route::middleware(['auth'])->group(function () {
+    Route::get('/admin/dashboard', [App\Http\Controllers\Admin\DashboardController::class, 'index'])
+            ->name('dashboard');
+    Route::get('/admin/products', [App\Http\Controllers\Admin\ProductsController::class, 'index'])->name('products_list');
+    Route::get('/admin/products/create', [App\Http\Controllers\Admin\ProductsController::class, 'create'])->name('create_product');
+    Route::post('/admin/products/store', [App\Http\Controllers\Admin\ProductsController::class, 'store']);
+    Route::get('/admin/products/edit/{product}', [App\Http\Controllers\Admin\ProductsController::class, 'edit']);
+});
