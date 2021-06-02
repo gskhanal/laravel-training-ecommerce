@@ -12,7 +12,7 @@
                 </div>
             @endif
             <h2>Create Product</h2>
-            <form action="/admin/products/store" method="POST" enctype="multipart/form-data">
+            <form action="{{ route('admin.products.store') }}" method="POST" enctype="multipart/form-data">
                 @csrf
                 Product Name: <input type="text" name="product_name" id="" class="form-control" value="{{ old('product_name') }}"
                 @error('product_name')

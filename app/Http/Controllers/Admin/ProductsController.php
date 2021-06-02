@@ -70,7 +70,7 @@ class ProductsController extends Controller
         }
         // return $product;
         if($product->save()){
-            return redirect()->route('products_list');
+            return redirect()->route('admin.products.index');
         }else {
             return redirect()->back();
         }
