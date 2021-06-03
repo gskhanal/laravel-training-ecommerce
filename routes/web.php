@@ -14,10 +14,6 @@ use App\Http\Controllers\ProductsController;
 | contains the "web" middleware group. Now create something great!
 |
 */
-Route::get('/', function () {
-    return view('welcome');
-});
-
 Route::get('/dashboard', function () {
     return view('dashboard');
 })->middleware(['auth'])->name('dashboard');
@@ -51,6 +47,9 @@ Route::get('/create_product', function(){
 });
 
 Route::get('/home', [ProductsController::class, 'index']);
+// Route::get('/products/search', [ProductsController::class, 'search'])->name('products.search');
+Route::resource('products', ProductsController::class)->only(['index', 'show']);
+Route::get('search', [App\Http\Controllers\SearchController::class, 'search'])->name('search');
 
 Route::get('/categories/{category}', function(Category $category) {
     // $products = Product::whereCategoryId($category->id)->get();
