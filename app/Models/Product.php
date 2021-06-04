@@ -29,9 +29,11 @@ class Product extends Model
     public function scopeSearch($query, array $terms){ 
         $search = $terms['search'];
         $category = $terms['category'];
-        $query->when($search, function($query, $search){
+        $query->when($search, function($query) use($search){
             return $query->where('product_name', 'like', '%'. $search .'%')
                 ->orWhere('product_desc', 'like', '%'. $search .'%');
+            
+            
         }
         // , function($query){
         //     return $query->where('id', '>', 0);

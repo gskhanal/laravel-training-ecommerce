@@ -24,27 +24,6 @@ Route::get('/', function () {
     $products = Product::all();
     return view('home', ['products' => $products] );
 });
-Route::get('/products/{prod}', function (Product $prod) {  
-    // $product = Product::find($id);
-    return view('product', ['product' => $prod] );
-});
-
-Route::get('/create_product', function(){
-    Product::create([
-        'product_name' => 'Laptop1',
-        'product_desc' => 'This is very nice laptop1',
-        'price' => '100000'
-    ]);
-
-    $product = new Product;
-    $product->product_name = 'Pen';
-    $product->product_desc = 'This is pen';
-    $product->price = '10';
-    $product->save();
-
-    $product = Product::find(2);
-
-});
 
 Route::get('/home', [ProductsController::class, 'index']);
 // Route::get('/products/search', [ProductsController::class, 'search'])->name('products.search');
@@ -57,11 +36,8 @@ Route::get('/categories/{category}', function(Category $category) {
     return view('category', ['products' => $products, 'category' => $category]);
 });
 
-// Route::get('/get_product', function(){
-//     $products = Product::get();
-//     return $products;
-// });
-
+Route::resource('order', App\Http\Controllers\OrderController::class);
+Route::post('cart', [App\Http\Controllers\OrderItemController::class, 'store'])->name('add_to_cart')->middleware('auth');
 
 //  admin routing
 Route::middleware(['auth'])->prefix('admin')->name('admin.')->group(function () {
