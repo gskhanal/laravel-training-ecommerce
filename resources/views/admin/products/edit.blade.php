@@ -3,7 +3,9 @@
         <div class="container">
           <div class="az-content-body">
             <h2>Update Product: {{$product->product_name}}</h2>
-            <form action="/admin/products/store" method="POST">
+            @can('update', $product)
+              <form action="{{ route('admin.products.update', $product->id ) }}" method="POST">
+                @method('PUT')
                 @csrf
                 Product Name: <input type="text" name="product_name" id="" class="form-control" value="{{ $product->product_name }}"><br><br>
                 Product Desc: <textarea name="product_desc" id="" cols="30" rows="10" class="form-control">{{ $product->product_desc }}</textarea> <br><br>
@@ -22,7 +24,10 @@
                         @endforeach
                     </select> --}}
                 <input type="submit" name="submit" value="Save" class="form-control">
-            </form>
+              </form>
+            @else
+              You're not authorized to update this product.
+            @endcan
           </div>
         </div>
     </div>

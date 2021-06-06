@@ -12,6 +12,8 @@
                 </div>
             @endif
             <h2>Create Product</h2>
+            {{-- check if user is authorized to create a product --}}
+            {{-- @can('create', App\Models\Product::class) --}}
             <form action="{{ route('admin.products.store') }}" method="POST" enctype="multipart/form-data">
                 @csrf
                 Product Name: <input type="text" name="product_name" id="" class="form-control" value="{{ old('product_name') }}"
